@@ -14,5 +14,5 @@ fi
 
 echo "Got Function App Name: $FUNCTIONAPP_NAME"
 cd $(dirname "$0")
-func azure functionapp publish $FUNCTIONAPP_NAME --output none || die "Failed to publish function app $FUNCTIONAPP_NAME"
+func azure functionapp publish $FUNCTIONAPP_NAME --csharp --output none || die "Failed to publish function app $FUNCTIONAPP_NAME"
 cd ..

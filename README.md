@@ -1,7 +1,7 @@
 # Solution
 Technical Interview repository for Jonathan Littleton
 
-![High Level Diagram](./docs/images/HighLevel.png)
+![High Level Diagram](./docs/images/HighLevelDiagram.png)
 
 ## Business Problem
 

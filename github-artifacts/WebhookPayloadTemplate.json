@@ -1,0 +1,9 @@
+{
+  "name": "web",
+  "active": true,
+  "events": [@@EVENTS@@],
+  "config": {
+    "url": "@@URL@@",
+    "content_type": "json"
+  }
+}

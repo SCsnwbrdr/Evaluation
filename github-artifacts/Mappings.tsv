@@ -1,0 +1,2 @@
+/api/branchprotectionevents "branch_protection_rule"
+/api/repositoryevents   "repository"

@@ -1,0 +1,100 @@
+# name: CI/CD
+
+# on:
+#   push:
+#     branches: [ main ]
+#     paths-ignore:
+#       - '**/*.md'
+#   workflow_dispatch:
+
+# env:
+#   ENVIRONMENT: demo
+#   GIT_ORGANIZATION: SCsnwbrdr
+#   AZ_RESOURCEGROUPNAME: security-repository-compliance-demo
+#   AZ_LOCATION: eastus2
+  
+
+# jobs:
+#   build-function:
+#     name: Build Function Artifacts
+#     runs-on: ubuntu-latest
+#     defaults:
+#       run:
+#         working-directory: ./src
+#     steps:
+#     - uses: actions/checkout@v3
+#     - name: Setup .NET
+#       uses: actions/setup-dotnet@v2
+#       with:
+#         dotnet-version: 6.0.x
+#     - name: Restore dependencies
+#       run: dotnet restore
+#     - name: Build
+#       run: dotnet build --no-restore --configuration Release
+#     - name: Test
+#       run: dotnet test --no-build --verbosity normal
+#     - name: Publish Artifact
+#       run: dotnet publish --no-build --no-restore --configuration Release --output ./output
+#     - name: Upload a Build Artifact
+#       uses: actions/upload-artifact@v3.0.0
+#       with:
+#         name: azure-function
+#         path: ./src/output
+#   deployment:
+#     name: Deployment
+#     needs:
+#       - build-function
+#     runs-on: ubuntu-latest
+#     env:
+#       ResourceGroupLocation: "eastus2"
+#     steps:
+#     - uses: actions/checkout@v3
+#     - uses: azure/login@v1
+#       with:
+#         creds: ${{ secrets.AZURE_CREDENTIALS }}
+#     - uses: Azure/CLI@v1
+#       id: azureclisetup
+#       with:
+#         inlineScript: |
+#           #!/bin/bash
+#           az group create --name ${{ env.AZ_RESOURCEGROUPNAME }} --location ${{ env.AZ_LOCATION }}
+#           local_user_id=$(az ad sp show --id ${{ secrets.AZURE_OBJECT_ID }} --query objectId --out tsv)
+#           echo "Azure resource group created"
+#           echo "::set-output name=deployment_user_id::$(echo $local_user_id)"
+#     - name: Deploy ARM Template
+#       id: deployarm
+#       uses: azure/arm-deploy@v1
+#       with:
+#         subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
+#         resourceGroupName: ${{ env.AZ_RESOURCEGROUPNAME}}
+#         template: ./infra/Templates/template.json
+#         parameters: environment=${{ env.ENVIRONMENT }} appId="${{ secrets.SOLUTION_GITHUB_APP_ID }}" keyValue="${{ secrets.SOLUTION_GITHUB_APP_PRIVATE_KEY }}" deployment_user_id="${{ steps.azureclisetup.outputs.deployment_user_id }}"
+    
+#     - name: Download the Function Build Artifact
+#       uses: actions/download-artifact@v3.0.0
+#       with:
+#         name: azure-function
+#         path: ./artifacts/function
+        
+#     - name: Azure Functions Deployment
+#       uses: Azure/functions-action@v1.4.4
+#       with:
+#         app-name: ${{ steps.deployarm.outputs.functionName }}
+#         package: ./artifacts/function
+        
+#     - name: Get token
+#       id: get_token
+#       uses: tibdex/github-app-token@v1
+#       with:
+#         private_key: ${{ secrets.DEPLOYMENT_APP_PRIVATE_KEY }}
+#         app_id: ${{ secrets.DEPLOYMENT_APP_ID }}
+        
+#     - name: Script
+#       env:
+#         GH_TOKEN: ${{ steps.get_token.outputs.token  }} 
+#         FUNCTIONAPP_NAME: ${{ steps.deployarm.outputs.functionName }}
+#       run: |
+#         chmod +x ./github-artifacts/Deploy.sh
+#         ./github-artifacts/Deploy.sh
+        
+

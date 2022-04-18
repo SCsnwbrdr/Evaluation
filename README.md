@@ -3,14 +3,6 @@ Technical Interview repository for Jonathan Littleton
 
 ![High Level Diagram](./docs/images/HighLevelDiagram.png)
 
-## Business Problem
-
-From email:
-
-*We are most interested in your approach, the mindset you apply, and how the solution is presented to your customer. The technical solution to accomplish this is to listen for organization events to know when a repository has been created. When the repository is created, please automate the protection of the default branch. Notify yourself with an @mention in an issue within the repository that outlines the protections that were added.*
-
-[Full Original Email is Here](/docs/requirements/2022_04_12_Email.md)
-
 ## Services & Technologies Used
 This solution uses the following services and features to accomplish the business criteria:
 

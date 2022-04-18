@@ -1,5 +1,7 @@
 # Solution
-Technical Interview
+Technical Interview repository for Jonathan Littleton
+
+![High Level Diagram](./docs/images/HighLevel.png)
 
 ## Business Problem
 
@@ -101,7 +103,7 @@ Contains webhook deployment code. Moved away from the special .github folder to 
 
 ## Deployment Setup
 
-Deployment via GitHub takes a bit more effort but it is possible. This is out of Scope for the POC, these instructions are use at your own risk You will need the following setup:
+Deployment via GitHub takes a bit more effort but it is possible. This is out of Scope for the POC, these instructions are "use at your own risk". You will need the following setup:
 
 1. GitHub App for Deployment (actions can't create webhooks on the org) [Creating an App](hhttps://docs.github.com/en/developers/apps/building-github-apps/creating-a-github-app), [App Concept](https://docs.github.com/en/developers/apps/getting-started-with-apps/about-apps)
   - DEPLOYMENT_APP_ID
@@ -116,7 +118,7 @@ Deployment via GitHub takes a bit more effort but it is possible. This is out of
   - AZURE_OBJECT_ID => There was a bug in the Azure CLI with permissions on Azure AD. Given the deprecation of the old Azure AD endpoints, I deprioritized fixing this.
   - AZURE_SUBSCRIPTION => That you are deploying into
 
-The CICD action file is mostly ready to go but was tested on a private repository. We will view the repository for the demo. 
+The CICD action file is mostly ready to go but was tested on a private repository. We will view the repository for the demo. Local Deployments will work.
 
 ## Attributions
 
